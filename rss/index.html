@@ -1,1 +1,61 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0" xmlns:media="http://search.yahoo.com/mrss/"><channel><title><![CDATA[Raging blog]]></title><description><![CDATA[Thoughts, ideas and articles in the development and food spaces]]></description><link>https://ragingbit.github.io/</link><image><url>https://ragingbit.github.io/favicon.png</url><title>Raging blog</title><link>https://ragingbit.github.io/</link></image><generator>Ghost 5.70</generator><lastBuildDate>Mon, 23 Oct 2023 07:34:45 GMT</lastBuildDate><atom:link href="https://ragingbit.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl></channel></rss>
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0" xmlns:media="http://search.yahoo.com/mrss/"><channel><title><![CDATA[Raging blog]]></title><description><![CDATA[Thoughts, ideas and articles in the development and food spaces]]></description><link>https://ragingbit.github.io/</link><image><url>https://ragingbit.github.io/favicon.png</url><title>Raging blog</title><link>https://ragingbit.github.io/</link></image><generator>Ghost 5.70</generator><lastBuildDate>Mon, 23 Oct 2023 07:40:24 GMT</lastBuildDate><atom:link href="https://ragingbit.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[Red, Green, Refactor]]></title><description><![CDATA[Using Red-Green-Refactor is a way to ensure that the code we write is the result of the capabilities we ask of it.]]></description><link>https://ragingbit.github.io/red-green-refactor/</link><guid isPermaLink="false">653240035feaa848657966e9</guid><category><![CDATA[quality]]></category><category><![CDATA[refactoring]]></category><category><![CDATA[tdd]]></category><category><![CDATA[testing]]></category><dc:creator><![CDATA[Johannes Steen]]></dc:creator><pubDate>Fri, 20 Oct 2023 10:19:42 GMT</pubDate><media:content url="https://ragingbit.github.io/content/images/2023/10/tempImagetsfn3q.gif" medium="image"/><content:encoded><![CDATA[<img src="https://ragingbit.github.io/content/images/2023/10/tempImagetsfn3q.gif" alt="Red, Green, Refactor"><p>There are numerous ways to maintain quality and correctness in the code we write - behaviour driven development, test driven development, fear driven development. The Red-Green-Refactor technique falls under TDD and is a way to ensure that the code we write is the result of the capabilities we ask of it while also fulfilling our standards of quality.</p><p>Using Red-Green-Refactor means that we start with a test that fails (Red), we then write the code that makes the test pass (Green) and last we improve the code for quality (Refactor). Then we repeat, and slowly build our code while ensuring it is tested. What follows is a convoluted example, but it demonstrates the process:</p><p>Red - write the test and enough code that it compiles.</p><figure class="kg-card kg-code-card"><pre><code class="language-cs">public record Fruit(string Name, string Colour, string Weight);
+
+public record FruitEntity();
+
+public class FruitService(Db db)
+{
+    public void Save(Fruit fruit)
+    {
+        throw new NotImplementedException();
+    }
+}
+
+public void FruitService_should_save_fruit_to_db()
+{
+    var dbMock = Mock.Of&lt;Db&gt;();
+    var service = new FruitService(dbMock);
+
+    service.Save(new Fruit(&quot;apple&quot;, &quot;red&quot;, &quot;300g&quot;));
+
+    dbMock.Verify(db =&gt; db.AddEntity(It.IsAny&lt;FruitEntity&gt;()), Times.Once);
+}</code></pre><figcaption><p><span style="white-space: pre-wrap;">Just enough to compile and fail</span></p></figcaption></figure><p>Green - make the test pass by fulfilling the expectation in the test.</p><figure class="kg-card kg-code-card"><pre><code class="language-cs">public record FruitDto
+{
+    public FruitEntity(Fruit fruit)
+    {
+        Name = fruit.Name;
+        Colour = fruit.Colour;
+        Weight = fruit.Weight;
+    }
+
+    public string Name { get; }
+    public string Colour { get; }
+    public string Weight { get; }
+}
+
+public class FruitService(Db db)
+{
+    public void Save(Fruit fruit)
+    {
+        db.AddEntity(new FruitEntity(fruit));
+    }
+}</code></pre><figcaption><p><span style="white-space: pre-wrap;">Introduce some properties and a copy constructor, and use the injected Db service</span></p></figcaption></figure><p>Refactor - extract variables, clarify hidden logic, and other.</p><figure class="kg-card kg-code-card"><pre><code class="language-cs">public record FruitEntity
+{
+    public string Name { get; init; }
+    public string Colour { get; init; }
+    public string Weight { get; init; }
+}
+
+public class FruitService(Db db)
+{
+    public void Save(Fruit fruit)
+    {
+        var fruitEntity = new FruitEntity
+        {
+            Name = fruit.Name,
+            Colour = fruit.Colour,
+            Weight = fruit.Weight,
+        };
+    
+        db.AddEntity(fruitEntity);
+    }
+}</code></pre><figcaption><p><span style="white-space: pre-wrap;">Move the initiation logic of the entity to the method - I like keeping my entities clean of logic</span></p></figcaption></figure><p> I&apos;ve encountered (and used) a fair few alternative techniques, such as Green-Red-Refactor (not a canonical name) where you start by writing the code and then you try to write a test that passes, realise you need to refactor the code to make it testable, and so on.</p><p>Doing strict TDD can be difficult and most end up using a process that falls somewhere between RGR and GRR - perhaps taking shortcuts by writing code that performs the task, compiles, but does nothing fancy like argument checking or validating input.</p><p>The end result of any testing is to ensure that our code does what we expect it to. How we arrive at that result is largely up to opinionated debate.</p>]]></content:encoded></item></channel></rss>
