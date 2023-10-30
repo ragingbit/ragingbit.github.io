@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Collaborating when using Git</title>
+    <link rel="stylesheet" href="/assets/built/screen.css?v=33fa36e59f">
+
+
+    <style>
+        :root {
+            --background-color: #ffffff
+        }
+    </style>
+
+    <script>
+        /* The script for calculating the color contrast was taken from
+        https://gomakethings.com/dynamically-changing-the-text-color-based-on-background-color-contrast-with-vanilla-js/ */
+        var accentColor = getComputedStyle(document.documentElement).getPropertyValue('--background-color');
+        accentColor = accentColor.trim().slice(1);
+        var r = parseInt(accentColor.substr(0, 2), 16);
+        var g = parseInt(accentColor.substr(2, 2), 16);
+        var b = parseInt(accentColor.substr(4, 2), 16);
+        var yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000;
+        var textColor = (yiq >= 128) ? 'dark' : 'light';
+
+        document.documentElement.className = `has-${textColor}-text`;
+    </script>
+
+    <meta name="description" content="Maintaining conventions and standards in a team or an open source repository enables us to confidently collaborate and trace changes.">
+    <link rel="canonical" href="https://ragingbit.github.io/collaborating-when-using-git/">
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    
+    <meta property="og:site_name" content="Raging blog">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Collaborating when using Git">
+    <meta property="og:description" content="When collaborating in a team or an open source repository it&#x27;s important to maintain conventions and standards, to be able to confidently trace changes">
+    <meta property="og:url" content="https://ragingbit.github.io/collaborating-when-using-git/">
+    <meta property="og:image" content="https://images.unsplash.com/photo-1556075798-4825dfaaf498?crop&#x3D;entropy&amp;cs&#x3D;tinysrgb&amp;fit&#x3D;max&amp;fm&#x3D;jpg&amp;ixid&#x3D;M3wxMTc3M3wwfDF8c2VhcmNofDF8fGdpdHxlbnwwfHx8fDE2OTg2NTU1NTF8MA&amp;ixlib&#x3D;rb-4.0.3&amp;q&#x3D;80&amp;w&#x3D;2000">
+    <meta property="article:published_time" content="2023-10-30T08:48:14.000Z">
+    <meta property="article:modified_time" content="2023-10-30T08:48:14.000Z">
+    <meta property="article:tag" content="collaboration">
+    <meta property="article:tag" content="git">
+    <meta property="article:tag" content="conventions">
+    
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Collaborating when using Git">
+    <meta name="twitter:description" content="When collaborating in a team or an open source repository it&#x27;s important to maintain conventions and standards, to be able to confidently trace changes">
+    <meta name="twitter:url" content="https://ragingbit.github.io/collaborating-when-using-git/">
+    <meta name="twitter:image" content="https://images.unsplash.com/photo-1556075798-4825dfaaf498?crop&#x3D;entropy&amp;cs&#x3D;tinysrgb&amp;fit&#x3D;max&amp;fm&#x3D;jpg&amp;ixid&#x3D;M3wxMTc3M3wwfDF8c2VhcmNofDF8fGdpdHxlbnwwfHx8fDE2OTg2NTU1NTF8MA&amp;ixlib&#x3D;rb-4.0.3&amp;q&#x3D;80&amp;w&#x3D;2000">
+    <meta name="twitter:label1" content="Written by">
+    <meta name="twitter:data1" content="Johannes Steen">
+    <meta name="twitter:label2" content="Filed under">
+    <meta name="twitter:data2" content="collaboration, git, conventions">
+    <meta property="og:image:width" content="2000">
+    <meta property="og:image:height" content="1325">
+    
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "publisher": {
+        "@type": "Organization",
+        "name": "Raging blog",
+        "url": "https://ragingbit.github.io/",
+        "logo": {
+            "@type": "ImageObject",
+            "url": "https://ragingbit.github.io/favicon.ico"
+        }
+    },
+    "author": {
+        "@type": "Person",
+        "name": "Johannes Steen",
+        "url": "https://ragingbit.github.io/author/johannes/",
+        "sameAs": []
+    },
+    "headline": "Collaborating when using Git",
+    "url": "https://ragingbit.github.io/collaborating-when-using-git/",
+    "datePublished": "2023-10-30T08:48:14.000Z",
+    "dateModified": "2023-10-30T08:48:14.000Z",
+    "image": {
+        "@type": "ImageObject",
+        "url": "https://images.unsplash.com/photo-1556075798-4825dfaaf498?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMTc3M3wwfDF8c2VhcmNofDF8fGdpdHxlbnwwfHx8fDE2OTg2NTU1NTF8MA&ixlib=rb-4.0.3&q=80&w=2000",
+        "width": 2000,
+        "height": 1325
+    },
+    "keywords": "collaboration, git, conventions",
+    "description": "When collaborating in a team or an open source repository it&#x27;s important to maintain conventions and standards, to be able to confidently trace changes",
+    "mainEntityOfPage": "https://ragingbit.github.io/collaborating-when-using-git/"
+}
+    </script>
+
+    <meta name="generator" content="Ghost 5.70">
+    <link rel="alternate" type="application/rss+xml" title="Raging blog" href="https://ragingbit.github.io/rss/">
+    
+    <script defer src="https://cdn.jsdelivr.net/ghost/sodo-search@~1.1/umd/sodo-search.min.js" data-key="e51f6337a8caadc7b231fee0cb" data-styles="https://cdn.jsdelivr.net/ghost/sodo-search@~1.1/umd/main.css" data-sodo-search="https://ragingbit.github.io/" crossorigin="anonymous"></script>
+    
+    <link href="https://ragingbit.github.io/webmentions/receive/" rel="webmention">
+    <script defer src="/public/cards.min.js?v=33fa36e59f"></script><style>:root {--ghost-accent-color: #4c0a8a;}</style>
+    <link rel="stylesheet" type="text/css" href="/public/cards.min.css?v=33fa36e59f">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" integrity="sha512-vswe+cgvic/XBoF1OcM/TeJ2FW0OofqAVdCZiEYkd6dwGXthvkSFWOoGGJgS2CW70VK5dQM5Oh+7ne47s74VTg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+
+<body class="post-template tag-collaboration tag-git tag-conventions is-head-left-logo has-classic-feed">
+<div class="gh-site">
+
+    <header id="gh-head" class="gh-head gh-outer">
+        <div class="gh-head-inner gh-inner">
+            <div class="gh-head-brand">
+                <div class="gh-head-brand-wrapper">
+                    <a class="gh-head-logo" href="https://ragingbit.github.io">
+                            Raging blog
+                    </a>
+                </div>
+                <button class="gh-search gh-icon-btn" aria-label="Search this site" data-ghost-search><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M17.5 17.5L12.5 12.5L17.5 17.5ZM14.1667 8.33333C14.1667 9.09938 14.0158 9.85792 13.7226 10.5657C13.4295 11.2734 12.9998 11.9164 12.4581 12.4581C11.9164 12.9998 11.2734 13.4295 10.5657 13.7226C9.85792 14.0158 9.09938 14.1667 8.33333 14.1667C7.56729 14.1667 6.80875 14.0158 6.10101 13.7226C5.39328 13.4295 4.75022 12.9998 4.20854 12.4581C3.66687 11.9164 3.23719 11.2734 2.94404 10.5657C2.65088 9.85792 2.5 9.09938 2.5 8.33333C2.5 6.78624 3.11458 5.30251 4.20854 4.20854C5.30251 3.11458 6.78624 2.5 8.33333 2.5C9.88043 2.5 11.3642 3.11458 12.4581 4.20854C13.5521 5.30251 14.1667 6.78624 14.1667 8.33333Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+</button>
+                <button class="gh-burger"></button>
+            </div>
+
+            <nav class="gh-head-menu">
+                <ul class="nav">
+    <li class="nav-home"><a href="https://ragingbit.github.io/">Home</a></li>
+</ul>
+
+            </nav>
+
+            <div class="gh-head-actions">
+                        <button class="gh-search gh-icon-btn" aria-label="Search this site" data-ghost-search><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M17.5 17.5L12.5 12.5L17.5 17.5ZM14.1667 8.33333C14.1667 9.09938 14.0158 9.85792 13.7226 10.5657C13.4295 11.2734 12.9998 11.9164 12.4581 12.4581C11.9164 12.9998 11.2734 13.4295 10.5657 13.7226C9.85792 14.0158 9.09938 14.1667 8.33333 14.1667C7.56729 14.1667 6.80875 14.0158 6.10101 13.7226C5.39328 13.4295 4.75022 12.9998 4.20854 12.4581C3.66687 11.9164 3.23719 11.2734 2.94404 10.5657C2.65088 9.85792 2.5 9.09938 2.5 8.33333C2.5 6.78624 3.11458 5.30251 4.20854 4.20854C5.30251 3.11458 6.78624 2.5 8.33333 2.5C9.88043 2.5 11.3642 3.11458 12.4581 4.20854C13.5521 5.30251 14.1667 6.78624 14.1667 8.33333Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+</button>
+            </div>
+        </div>
+    </header>
+
+    
+<main class="gh-main gh-outer">
+    <div class="gh-inner">
+            <article class="gh-article post tag-collaboration tag-git tag-conventions">
+                    <header class="gh-article-header gh-canvas">
+                        <h1 class="gh-article-title">Collaborating when using Git</h1>
+                            <p class="gh-article-excerpt">When collaborating in a team or an open source repository it&#x27;s important to maintain conventions and standards, to be able to confidently trace changes</p>
+                            <figure class="gh-article-image has-caption">
+        <img
+            srcset="https://images.unsplash.com/photo-1556075798-4825dfaaf498?crop&#x3D;entropy&amp;cs&#x3D;tinysrgb&amp;fit&#x3D;max&amp;fm&#x3D;jpg&amp;ixid&#x3D;M3wxMTc3M3wwfDF8c2VhcmNofDF8fGdpdHxlbnwwfHx8fDE2OTg2NTU1NTF8MA&amp;ixlib&#x3D;rb-4.0.3&amp;q&#x3D;80&amp;w&#x3D;300 300w,
+                    https://images.unsplash.com/photo-1556075798-4825dfaaf498?crop&#x3D;entropy&amp;cs&#x3D;tinysrgb&amp;fit&#x3D;max&amp;fm&#x3D;jpg&amp;ixid&#x3D;M3wxMTc3M3wwfDF8c2VhcmNofDF8fGdpdHxlbnwwfHx8fDE2OTg2NTU1NTF8MA&amp;ixlib&#x3D;rb-4.0.3&amp;q&#x3D;80&amp;w&#x3D;720 720w,
+                    https://images.unsplash.com/photo-1556075798-4825dfaaf498?crop&#x3D;entropy&amp;cs&#x3D;tinysrgb&amp;fit&#x3D;max&amp;fm&#x3D;jpg&amp;ixid&#x3D;M3wxMTc3M3wwfDF8c2VhcmNofDF8fGdpdHxlbnwwfHx8fDE2OTg2NTU1NTF8MA&amp;ixlib&#x3D;rb-4.0.3&amp;q&#x3D;80&amp;w&#x3D;960 960w,
+                    https://images.unsplash.com/photo-1556075798-4825dfaaf498?crop&#x3D;entropy&amp;cs&#x3D;tinysrgb&amp;fit&#x3D;max&amp;fm&#x3D;jpg&amp;ixid&#x3D;M3wxMTc3M3wwfDF8c2VhcmNofDF8fGdpdHxlbnwwfHx8fDE2OTg2NTU1NTF8MA&amp;ixlib&#x3D;rb-4.0.3&amp;q&#x3D;80&amp;w&#x3D;1200 1200w,
+                    https://images.unsplash.com/photo-1556075798-4825dfaaf498?crop&#x3D;entropy&amp;cs&#x3D;tinysrgb&amp;fit&#x3D;max&amp;fm&#x3D;jpg&amp;ixid&#x3D;M3wxMTc3M3wwfDF8c2VhcmNofDF8fGdpdHxlbnwwfHx8fDE2OTg2NTU1NTF8MA&amp;ixlib&#x3D;rb-4.0.3&amp;q&#x3D;80&amp;w&#x3D;2000 2000w,
+                    https://images.unsplash.com/photo-1556075798-4825dfaaf498?crop&#x3D;entropy&amp;cs&#x3D;tinysrgb&amp;fit&#x3D;max&amp;fm&#x3D;jpg&amp;ixid&#x3D;M3wxMTc3M3wwfDF8c2VhcmNofDF8fGdpdHxlbnwwfHx8fDE2OTg2NTU1NTF8MA&amp;ixlib&#x3D;rb-4.0.3&amp;q&#x3D;80&amp;w&#x3D;2000"
+            sizes="(max-width: 1200px) 100vw, 1200px"
+            src="https://images.unsplash.com/photo-1556075798-4825dfaaf498?crop&#x3D;entropy&amp;cs&#x3D;tinysrgb&amp;fit&#x3D;max&amp;fm&#x3D;jpg&amp;ixid&#x3D;M3wxMTc3M3wwfDF8c2VhcmNofDF8fGdpdHxlbnwwfHx8fDE2OTg2NTU1NTF8MA&amp;ixlib&#x3D;rb-4.0.3&amp;q&#x3D;80&amp;w&#x3D;1200"
+            alt="Collaborating when using Git"
+        >
+            <figcaption><span style="white-space: pre-wrap;">Photo by </span><a href="https://unsplash.com/@yancymin?utm_source=ghost&amp;utm_medium=referral&amp;utm_campaign=api-credit"><span style="white-space: pre-wrap;">Yancy Min</span></a><span style="white-space: pre-wrap;"> / </span><a href="https://unsplash.com/?utm_source=ghost&amp;utm_medium=referral&amp;utm_campaign=api-credit"><span style="white-space: pre-wrap;">Unsplash</span></a></figcaption>
+    </figure>
+                    </header>
+
+                <section class="gh-content gh-canvas">
+                    <p>Git is great. It's also pretty open-ended in how you can use it. When collaborating in a team or an open repository, if everyone has their own view of how to use Git, we quickly end up with a fractured and inconsistent history of changes.</p><h2 id="branch-names">Branch names</h2><p>When creating a new branch it's recommended to use consistent branch naming that includes the type of task and the issue number. This allows for automation to pick up information for linking issues with pull requests, or creating versions for new releases. What that naming convention looks like is often particular to a team or OSS project but would probably look something like <code>feature/vp312-crud-endpoints-for-cars</code>.</p><ul><li><code>feature</code>: The prefix before the first slash is generally reserved for the type of task. It can (and probably should) be chosen from a range of standardised categories: feature, fix or chore. Non-trunkbased development also tends to utilise release/tag and hotfix prefixes.</li><li><code>vp312</code>: The issue number, identifying which issue the branch is tied to. Branches should generally only cover one issue.</li><li><code>crud-endpoints-for-cars</code>: A very brief description for humans. </li></ul><h2 id="commits">Commits</h2><p>Do them often. Failing to commit often can result in headaches and pains trying to walk back changes that have become too large.</p><p>Intent is a key factor in writing brief, informative and relevant commit messages. Consider the intent of the commit, what is it that you’re accomplishing? Try to avoid "update" or "thing", or the technical description of what you’re doing if it’s a feature commit and instead focus on the feature itself: instead of “add create-endpoint to car controller” a much more descriptive message would be “allow cars to be updated via api”. This might seem superfluous when squash-merging pull requests but it allows for traceability and clarity in reviewing before the code is merged.</p><p>Try to follow an established standard, or modify one to suit. <a href="https://www.conventionalcommits.org/">Conventional Commits</a> is a style that’s easy to learn and form a habit around, with permissive conventions around types, categories and issue-linking. Conventional commits also help create a good summary for pull request change lists. They can be used to good advantage in the merge-commit message for pull requests, helping to categorise and link to issues and releases, as well as automating release notes.</p><h3 id="conventional-commit-examples">Conventional commit examples</h3><pre><code>chore: update postcss for es6</code></pre><ul><li><code>chore</code>: commit type</li><li><code>update postcss for es6</code>: commit description</li></ul><pre><code>feat(cars)!: remove ability to update cars via api</code></pre><ul><li><code>feat</code>: commit type</li><li><code>(cars)</code>: optional scope</li><li><code>!</code>: optional signifier for breaking change</li><li><code>remove ability to update cars via api</code>: commit description</li></ul><pre><code>feat(cars-reports): allow more properties when filtering cars
+
+refs: #vp312</code></pre><ul><li><code>feat</code>: commit type</li><li><code>(cars-reports)</code>: optional scope</li><li><code>allow more properties when filtering cars</code>: commit description</li><li><code>refs: #vp312</code>: optional footer token</li></ul><h2 id="staying-up-to-date">Staying up to date</h2><p>A good habit to form is to rebase your branch onto the target daily (or more often!). If you maintain a branch over a longer period of time, integrating the newest changes from the target branch often helps resolve conflicts quickly, making the final pull request merge easier to prepare.</p><p>Rebasing the branch onto the target is preferable to merging the target into the branch, to maintain a clean history and change tree, also helping to reduce the friction of any merge conflicts down the line and the ability to trace changes.</p><p>Configuring the default behaviour of pulls to use rebasing rather than merging is one way to ensure you don’t forget: <code>git config --global pull.rebase true</code></p><p>More here: <a href="https://www.atlassian.com/git/tutorials/rewriting-history/git-rebase">https://www.atlassian.com/git/tutorials/rewriting-history/git-rebase</a></p><h2 id="maintaining-a-clean-local-history">Maintaining a clean (local) history</h2><p>Something that frequently helps when tracing earlier changes in a local feature branch is having a clean and readable commit history that follows a reasonably structured timeline. One way to achieve this is to manually amend earlier commits with interactive rebasing. Bryan Braun writes about <a href="https://www.bryanbraun.com/2019/02/23/editing-a-commit-in-an-interactive-rebase/" rel="noreferrer">editing a commit in an interactive rebase</a>. Another option is to use git fixup and autosquash which allows you to create fixup-commits for earlier (un-pushed) commits and then using <code>git --autosquash</code> to automatically prune your git history, which Andrew Lock writes about in his article about <a href="https://andrewlock.net/smoother-rebases-with-auto-squashing-git-commits/" rel="noreferrer">auto-squashing commits</a>.</p><h2 id="links">Links</h2><ul><li><a href="https://www.conventionalcommits.org/en/v1.0.0/">https://www.conventionalcommits.org/en/v1.0.0/</a></li><li><a href="https://www.atlassian.com/git/tutorials/rewriting-history/git-rebase">https://www.atlassian.com/git/tutorials/rewriting-history/git-rebase</a></li><li><a href="https://www.bryanbraun.com/2019/02/23/editing-a-commit-in-an-interactive-rebase/">https://www.bryanbraun.com/2019/02/23/editing-a-commit-in-an-interactive-rebase/</a></li><li><a href="https://andrewlock.net/smoother-rebases-with-auto-squashing-git-commits/">https://andrewlock.net/smoother-rebases-with-auto-squashing-git-commits/</a></li></ul>
+                    <aside class="gh-article-meta">
+                        <div class="gh-article-meta-inner">
+                                <div class="gh-article-meta-wrapper">
+                                <h4 class="gh-author-name">
+                                    <a href="/author/johannes/">Johannes Steen</a>
+                                </h4>
+                            <time class="gh-article-date" datetime="2023-10-30">Oct 30, 2023</time></div>
+                                <a class="gh-article-tag" href="https://ragingbit.github.io/tag/collaboration/" style="--tag-color: ">collaboration</a>
+                        </div>
+                    </aside>
+                </section>
+
+
+                <footer class="gh-article-footer gh-canvas">
+                    <nav class="gh-navigation">
+                        <div class="gh-navigation-previous">
+                                <a class="gh-navigation-link" href="/red-green-refactor/">← Previous</a>
+                        </div>
+
+                        <div class="gh-navigation-middle"></div>
+
+                        <div class="gh-navigation-next">
+                        </div>
+                    </nav>
+                </footer>
+            </article>
+    </div>
+</main>
+
+    <footer class="gh-foot gh-outer">
+        <div class="gh-foot-inner gh-inner">
+            <nav class="gh-foot-menu">
+                
+            </nav>
+
+            <div class="gh-copyright">
+                    Raging blog © 2023. Powered by <a href="https://ghost.org/" target="_blank" rel="noopener">Ghost</a>
+            </div>
+        </div>
+    </footer>
+
+</div>
+
+    <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="pswp__bg"></div>
+
+    <div class="pswp__scroll-wrap">
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)"></button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/assets/built/main.min.js?v=33fa36e59f"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js" integrity="sha512-9khQRAUBYEJDCDVP2yw3LRUQvjJ0Pjx0EShmaQjcHa6AXiOv6qHQu9lCAIR8O+/D8FtaCoJ2c0Tf9Xo7hYH01Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js" integrity="sha512-SkmBfuA2hqjzEVpmnMt/LINrjop3GKWqsuLSSB3e7iBmYK7JuWw4ldmmxwD9mdm2IRTTi0OxSAfEGvgEi0i2Kw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+</body>
+
+</html>
