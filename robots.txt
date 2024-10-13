@@ -1,6 +1,7 @@
 User-agent: *
-Sitemap: https://ragignbit.github.io/sitemap.xml
+Sitemap: https://ragingbit.github.io/sitemap.xml
 Disallow: /ghost/
-Disallow: /p/
 Disallow: /email/
+Disallow: /members/api/comments/counts/
 Disallow: /r/
+Disallow: /webmentions/receive/

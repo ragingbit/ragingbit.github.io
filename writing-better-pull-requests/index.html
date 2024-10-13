@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Writing better pull requests</title>
+    <link rel="stylesheet" href="/assets/built/screen.css?v=88b8184fcd">
+
+
+    <style>
+        :root {
+            --background-color: #ffffff
+        }
+    </style>
+
+    <script>
+        /* The script for calculating the color contrast was taken from
+        https://gomakethings.com/dynamically-changing-the-text-color-based-on-background-color-contrast-with-vanilla-js/ */
+        var accentColor = getComputedStyle(document.documentElement).getPropertyValue('--background-color');
+        accentColor = accentColor.trim().slice(1);
+        var r = parseInt(accentColor.substr(0, 2), 16);
+        var g = parseInt(accentColor.substr(2, 2), 16);
+        var b = parseInt(accentColor.substr(4, 2), 16);
+        var yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000;
+        var textColor = (yiq >= 128) ? 'dark' : 'light';
+
+        document.documentElement.className = `has-${textColor}-text`;
+    </script>
+
+    <meta name="description" content="Creating pull requests is easy - writing them to be legible and easy to understand can be an art.">
+    <link rel="canonical" href="https://ragingbit.github.io/writing-better-pull-requests/">
+    <meta name="referrer" content="no-referrer-when-downgrade">
+
+    <meta property="og:site_name" content="ragingbit | blog">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Writing better pull requests">
+    <meta property="og:description" content="Creating pull requests is easy - writing them to be legible and easy to understand can be an art.">
+    <meta property="og:url" content="https://ragingbit.github.io/writing-better-pull-requests/">
+    <meta property="og:image" content="https://images.unsplash.com/photo-1505682634904-d7c8d95cdc50?crop&#x3D;entropy&amp;cs&#x3D;tinysrgb&amp;fit&#x3D;max&amp;fm&#x3D;jpg&amp;ixid&#x3D;M3wxMTc3M3wwfDF8c2VhcmNofDM4fHx3cml0aW5nJTIwY29kZXxlbnwwfHx8fDE3Mjc4MDE2MjJ8MA&amp;ixlib&#x3D;rb-4.0.3&amp;q&#x3D;80&amp;w&#x3D;2000">
+    <meta property="article:published_time" content="2024-10-03T10:23:30.000Z">
+    <meta property="article:modified_time" content="2024-10-13T17:18:43.000Z">
+    <meta property="article:tag" content="Collaboration">
+    <meta property="article:tag" content="Conventions">
+    <meta property="article:tag" content="Git">
+    <meta property="article:tag" content="Quality">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Writing better pull requests">
+    <meta name="twitter:description" content="Creating pull requests is easy - writing them to be legible and easy to understand can be an art.">
+    <meta name="twitter:url" content="https://ragingbit.github.io/writing-better-pull-requests/">
+    <meta name="twitter:image" content="https://images.unsplash.com/photo-1505682634904-d7c8d95cdc50?crop&#x3D;entropy&amp;cs&#x3D;tinysrgb&amp;fit&#x3D;max&amp;fm&#x3D;jpg&amp;ixid&#x3D;M3wxMTc3M3wwfDF8c2VhcmNofDM4fHx3cml0aW5nJTIwY29kZXxlbnwwfHx8fDE3Mjc4MDE2MjJ8MA&amp;ixlib&#x3D;rb-4.0.3&amp;q&#x3D;80&amp;w&#x3D;2000">
+    <meta name="twitter:label1" content="Written by">
+    <meta name="twitter:data1" content="Johannes Steen">
+    <meta name="twitter:label2" content="Filed under">
+    <meta name="twitter:data2" content="Collaboration, Conventions, Git, Quality">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="800">
+
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "publisher": {
+        "@type": "Organization",
+        "name": "ragingbit | blog",
+        "url": "https://ragingbit.github.io/",
+        "logo": {
+            "@type": "ImageObject",
+            "url": "https://ragingbit.github.io/favicon.ico",
+            "width": 48,
+            "height": 48
+        }
+    },
+    "author": {
+        "@type": "Person",
+        "name": "Johannes Steen",
+        "url": "https://ragingbit.github.io/author/johannes/",
+        "sameAs": []
+    },
+    "headline": "Writing better pull requests",
+    "url": "https://ragingbit.github.io/writing-better-pull-requests/",
+    "datePublished": "2024-10-03T10:23:30.000Z",
+    "dateModified": "2024-10-13T17:18:43.000Z",
+    "image": {
+        "@type": "ImageObject",
+        "url": "https://images.unsplash.com/photo-1505682634904-d7c8d95cdc50?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wxMTc3M3wwfDF8c2VhcmNofDM4fHx3cml0aW5nJTIwY29kZXxlbnwwfHx8fDE3Mjc4MDE2MjJ8MA&ixlib=rb-4.0.3&q=80&w=2000",
+        "width": 1200,
+        "height": 800
+    },
+    "keywords": "Collaboration, Conventions, Git, Quality",
+    "description": "Creating pull requests is easy - writing them to be legible and easy to understand can be an art.",
+    "mainEntityOfPage": "https://ragingbit.github.io/writing-better-pull-requests/"
+}
+    </script>
+
+    <meta name="generator" content="Ghost 5.94">
+    <link rel="alternate" type="application/rss+xml" title="ragingbit | blog" href="https://ragingbit.github.io/rss/">
+
+    <script defer src="https://cdn.jsdelivr.net/ghost/sodo-search@~1.1/umd/sodo-search.min.js" data-key="d76dbb3f5399a5c2a6bef91382" data-styles="https://cdn.jsdelivr.net/ghost/sodo-search@~1.1/umd/main.css" data-sodo-search="https://ragingbit.github.io/" crossorigin="anonymous"></script>
+
+    <link href="https://ragingbit.github.io/webmentions/receive/" rel="webmention">
+    <script defer src="/public/cards.min.js?v=88b8184fcd"></script><style>:root {--ghost-accent-color: #4c0a8a;}</style>
+    <link rel="stylesheet" type="text/css" href="/public/cards.min.css?v=88b8184fcd">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" integrity="sha512-vswe+cgvic/XBoF1OcM/TeJ2FW0OofqAVdCZiEYkd6dwGXthvkSFWOoGGJgS2CW70VK5dQM5Oh+7ne47s74VTg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+
+<body class="post-template tag-collaboration tag-conventions tag-git tag-quality is-head-left-logo has-classic-feed">
+<div class="gh-site">
+
+    <header id="gh-head" class="gh-head gh-outer">
+        <div class="gh-head-inner gh-inner">
+            <div class="gh-head-brand">
+                <div class="gh-head-brand-wrapper">
+                    <a class="gh-head-logo" href="https://ragingbit.github.io">
+                            ragingbit | blog
+                    </a>
+                </div>
+                <button class="gh-search gh-icon-btn" aria-label="Search this site" data-ghost-search><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M17.5 17.5L12.5 12.5L17.5 17.5ZM14.1667 8.33333C14.1667 9.09938 14.0158 9.85792 13.7226 10.5657C13.4295 11.2734 12.9998 11.9164 12.4581 12.4581C11.9164 12.9998 11.2734 13.4295 10.5657 13.7226C9.85792 14.0158 9.09938 14.1667 8.33333 14.1667C7.56729 14.1667 6.80875 14.0158 6.10101 13.7226C5.39328 13.4295 4.75022 12.9998 4.20854 12.4581C3.66687 11.9164 3.23719 11.2734 2.94404 10.5657C2.65088 9.85792 2.5 9.09938 2.5 8.33333C2.5 6.78624 3.11458 5.30251 4.20854 4.20854C5.30251 3.11458 6.78624 2.5 8.33333 2.5C9.88043 2.5 11.3642 3.11458 12.4581 4.20854C13.5521 5.30251 14.1667 6.78624 14.1667 8.33333Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+</button>
+                <button class="gh-burger"></button>
+            </div>
+
+            <nav class="gh-head-menu">
+                <ul class="nav">
+    <li class="nav-home"><a href="https://ragingbit.github.io">Home</a></li>
+</ul>
+
+            </nav>
+
+            <div class="gh-head-actions">
+                        <button class="gh-search gh-icon-btn" aria-label="Search this site" data-ghost-search><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M17.5 17.5L12.5 12.5L17.5 17.5ZM14.1667 8.33333C14.1667 9.09938 14.0158 9.85792 13.7226 10.5657C13.4295 11.2734 12.9998 11.9164 12.4581 12.4581C11.9164 12.9998 11.2734 13.4295 10.5657 13.7226C9.85792 14.0158 9.09938 14.1667 8.33333 14.1667C7.56729 14.1667 6.80875 14.0158 6.10101 13.7226C5.39328 13.4295 4.75022 12.9998 4.20854 12.4581C3.66687 11.9164 3.23719 11.2734 2.94404 10.5657C2.65088 9.85792 2.5 9.09938 2.5 8.33333C2.5 6.78624 3.11458 5.30251 4.20854 4.20854C5.30251 3.11458 6.78624 2.5 8.33333 2.5C9.88043 2.5 11.3642 3.11458 12.4581 4.20854C13.5521 5.30251 14.1667 6.78624 14.1667 8.33333Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+</button>
+            </div>
+        </div>
+    </header>
+
+
+<main class="gh-main gh-outer">
+    <div class="gh-inner">
+            <article class="gh-article post tag-collaboration tag-conventions tag-git tag-quality">
+                    <header class="gh-article-header gh-canvas">
+                        <h1 class="gh-article-title">Writing better pull requests</h1>
+                            <p class="gh-article-excerpt">Creating pull requests is easy - writing them to be legible and easy to understand can be an art.</p>
+                            <figure class="gh-article-image has-caption">
+        <img
+            srcset="https://images.unsplash.com/photo-1505682634904-d7c8d95cdc50?crop&#x3D;entropy&amp;cs&#x3D;tinysrgb&amp;fit&#x3D;max&amp;fm&#x3D;jpg&amp;ixid&#x3D;M3wxMTc3M3wwfDF8c2VhcmNofDM4fHx3cml0aW5nJTIwY29kZXxlbnwwfHx8fDE3Mjc4MDE2MjJ8MA&amp;ixlib&#x3D;rb-4.0.3&amp;q&#x3D;80&amp;w&#x3D;300 300w,
+                    https://images.unsplash.com/photo-1505682634904-d7c8d95cdc50?crop&#x3D;entropy&amp;cs&#x3D;tinysrgb&amp;fit&#x3D;max&amp;fm&#x3D;jpg&amp;ixid&#x3D;M3wxMTc3M3wwfDF8c2VhcmNofDM4fHx3cml0aW5nJTIwY29kZXxlbnwwfHx8fDE3Mjc4MDE2MjJ8MA&amp;ixlib&#x3D;rb-4.0.3&amp;q&#x3D;80&amp;w&#x3D;720 720w,
+                    https://images.unsplash.com/photo-1505682634904-d7c8d95cdc50?crop&#x3D;entropy&amp;cs&#x3D;tinysrgb&amp;fit&#x3D;max&amp;fm&#x3D;jpg&amp;ixid&#x3D;M3wxMTc3M3wwfDF8c2VhcmNofDM4fHx3cml0aW5nJTIwY29kZXxlbnwwfHx8fDE3Mjc4MDE2MjJ8MA&amp;ixlib&#x3D;rb-4.0.3&amp;q&#x3D;80&amp;w&#x3D;960 960w,
+                    https://images.unsplash.com/photo-1505682634904-d7c8d95cdc50?crop&#x3D;entropy&amp;cs&#x3D;tinysrgb&amp;fit&#x3D;max&amp;fm&#x3D;jpg&amp;ixid&#x3D;M3wxMTc3M3wwfDF8c2VhcmNofDM4fHx3cml0aW5nJTIwY29kZXxlbnwwfHx8fDE3Mjc4MDE2MjJ8MA&amp;ixlib&#x3D;rb-4.0.3&amp;q&#x3D;80&amp;w&#x3D;1200 1200w,
+                    https://images.unsplash.com/photo-1505682634904-d7c8d95cdc50?crop&#x3D;entropy&amp;cs&#x3D;tinysrgb&amp;fit&#x3D;max&amp;fm&#x3D;jpg&amp;ixid&#x3D;M3wxMTc3M3wwfDF8c2VhcmNofDM4fHx3cml0aW5nJTIwY29kZXxlbnwwfHx8fDE3Mjc4MDE2MjJ8MA&amp;ixlib&#x3D;rb-4.0.3&amp;q&#x3D;80&amp;w&#x3D;2000 2000w,
+                    https://images.unsplash.com/photo-1505682634904-d7c8d95cdc50?crop&#x3D;entropy&amp;cs&#x3D;tinysrgb&amp;fit&#x3D;max&amp;fm&#x3D;jpg&amp;ixid&#x3D;M3wxMTc3M3wwfDF8c2VhcmNofDM4fHx3cml0aW5nJTIwY29kZXxlbnwwfHx8fDE3Mjc4MDE2MjJ8MA&amp;ixlib&#x3D;rb-4.0.3&amp;q&#x3D;80&amp;w&#x3D;2000"
+            sizes="(max-width: 1200px) 100vw, 1200px"
+            src="https://images.unsplash.com/photo-1505682634904-d7c8d95cdc50?crop&#x3D;entropy&amp;cs&#x3D;tinysrgb&amp;fit&#x3D;max&amp;fm&#x3D;jpg&amp;ixid&#x3D;M3wxMTc3M3wwfDF8c2VhcmNofDM4fHx3cml0aW5nJTIwY29kZXxlbnwwfHx8fDE3Mjc4MDE2MjJ8MA&amp;ixlib&#x3D;rb-4.0.3&amp;q&#x3D;80&amp;w&#x3D;1200"
+            alt="Writing better pull requests"
+        >
+            <figcaption><span style="white-space: pre-wrap;">Photo by </span><a href="https://unsplash.com/@patrickian4?utm_source=ghost&amp;utm_medium=referral&amp;utm_campaign=api-credit"><span style="white-space: pre-wrap;">Patrick Fore</span></a><span style="white-space: pre-wrap;"> / </span><a href="https://unsplash.com/?utm_source=ghost&amp;utm_medium=referral&amp;utm_campaign=api-credit"><span style="white-space: pre-wrap;">Unsplash</span></a></figcaption>
+    </figure>
+                    </header>
+
+                <section class="gh-content gh-canvas">
+                    <p>In order to maintain a high level of standard as well as high level of confidence in the things we develop, peer reviewing pull requests is an invaluable aid. Together with other tools like linters, unit tests, static code analysis and more, it provides a way for peers to review the code or config that we write for inconsistencies, errors or to make suggestions for improvement.</p><p>To help keep this process smooth and efficient, there are ways to tailor your pull requests to be easier to read and review, as well as ways you can be a better reviewer.</p><h2 id="prefer-consistent-branch-names">Prefer consistent branch names</h2><p>Having consistent branch names with standardised prefixes and issue numbering:</p><ul><li>Helps discoverability</li><li>Allows automatic tagging or categorisation of pull requests</li><li>Allows automatic linking of pull requests to issues</li></ul><h2 id="keep-it-short">Keep it short</h2><p>To make pull requests easier and more quick to review and merge, try to keep them short. Stay on point to the task at hand. If the task is large or has multiple contexts, separate your work into multiple, logical pull requests to focus those contexts. Don’t fix or change things not related to the task - create other pull requests for that.</p><h2 id="rebase-onto-the-target-branch-before-creating-the-pr">Rebase onto the target branch before creating the PR</h2><p>Rebasing and having an up to date feature/fix branch before creating your PR will save you and your reviewers the time of doing it after the PR has been created. Rebases are preferred to merges to reduce the complexity of reviewing changes in detail. Your feature/fix branch will contain only your relevant commits.</p><ul><li>It ensures that tests are against the latest code and will pass when the code is merged</li><li>It ensures that you don’t have to rewrite a feature after the PR is created simply because someone else introduced a change before you</li></ul><h2 id="describe-the-change">Describe the change</h2><p>Pull request titles and descriptions give the peer reviewing your pull request some initial context on the feature or fix being merged. Make that title and description easy to read and easily scannable.</p><h3 id="details-up-front">Details up front</h3><p>Including the following details can drastically improve the speed with which a pull request is reviewed:</p><ul><li>Brief title with clear intent of the change being proposed</li><li>A link to the issue, preferably through automation if detected in the branch name</li><li>A summary of what’s been done that expands on the title of the PR, listing the specific changes<ul><li>Providing clear, consistent commit summaries can help create this list quickly and efficiently</li></ul></li><li>Links to related pull requests in other repositories if part of the same change</li></ul><h3 id="use-plain-language">Use plain language</h3><p>Simpler words always convey meaning faster, normal words are preferable to jargon:</p><ul><li>Prefer “<em>use</em>” to “<em>utilise</em>” - different meanings and you probably want the meaning of “<em>use</em>”</li><li>Prefer “<em>request</em>” to “<em>ask</em>” - ask is a verb, not a noun (“<em>what’s the ask?</em>” vs “<em>what’s the request?</em>”)</li><li>Prefer “<em>do</em>” to “<em>operationalise</em>” - 12 fewer letters, 5 fewer syllables</li></ul><h3 id="avoid-passive-voice">Avoid passive voice</h3><p>Passive voice is often used when discussing things perceived negatively, such as bugs, downtime, crashes and the like. It’s a sign of people wanting to avoid assigning blame, or dodging blame (even when there’s no blame to assign or dodge):</p><p>“<em>We were asked to fix the algorithm that caused this bug by the customer services team.</em>”</p><p>A rewrite of this is easy, removing passive tones and promoting a direct voice:</p><p>“<em>The customer services team asked us to fix the algorithm that caused this bug.</em>”</p><p> Be direct when writing about your code without necessarily throwing people under the bus.</p><h3 id="avoid-adverbs">Avoid adverbs</h3><p>Adverbs can often be removed to make your descriptions more terse:</p><p>“<em>Replace a <strong>really slowly</strong> performing Qlik query with a faster raw SQL query</em>” vs “<em>Replace a slow Qlik query with a faster raw SQL query</em>”. That we’re doing it for the sake of improving performance is implicitly understood.</p><h3 id="keep-it-simple">Keep it simple</h3><p>Avoid making your sentences and paragraphs bloated with extraneous details and wording. For example:</p><p>“<em>The reason this is marked as DRAFT is to wait for the final verification of the name of the feature flag for the new login path.”</em></p><p>“The reason this is” can be replaced with “This is”. The “is” before “to wait” is unnecessary and can easily be removed. The last part of the sentence can be made more direct by removing prepositions.</p><p>“<em>This is marked DRAFT to wait for final verification of the new login path’s feature flag name.”</em></p><h3 id="putting-it-all-together">Putting it all together</h3><pre><code>If merged, this PR will:
+* Add a new model for cars
+* Add endpoints for CRUD operations on car properties
+* Update policies to only allow admins to rename cars
+* Fix error in car naming algorithm
+
+Related issues:
+* [Allow custom properties for cars](jira://cars-feature/issue/54)
+* [Lack of custom properties causes error in naming of cars](jira://cars-feature/issue/12)
+
+Related PRs:
+* [View changes to car reports](git://report-repo/pr/123)</code></pre><h2 id="comment-on-your-own-pull-requests">Comment on your own pull requests</h2><p>Instead of adding long comments in code that might not stand the test of time or simply don’t have a place there, add comments in the pull request itself. Explain why you made that refactoring, or removed that piece of code to give context to peers reviewing your request.</p><h2 id="avoid-changing-pushed-commits">Avoid changing pushed commits</h2><p>Try not to amend or squash already pushed commits when making updates to a remote branch. Do create new commits to address issues or comments, making it easier to review. Of course, amending or squashing commits that have not been pushed yet is perfectly viable. In fact, there are useful tools for maintaining a clean history before it’s pushed:</p><figure class="kg-card kg-bookmark-card"><a class="kg-bookmark-container" href="https://ragingbit.github.io/collaborating-when-using-git/"><div class="kg-bookmark-content"><div class="kg-bookmark-title">Collaborating when using Git</div><div class="kg-bookmark-description">When collaborating in a team or an open source repository it’s important to maintain conventions and standards, to be able to confidently trace changes</div><div class="kg-bookmark-metadata"><img class="kg-bookmark-icon" src="https://ragingbit.github.io/content/images/icon/favicon.ico" alt=""><span class="kg-bookmark-author">ragingbit | blog</span><span class="kg-bookmark-publisher">Johannes Steen</span></div></div><div class="kg-bookmark-thumbnail"><img src="https://ragingbit.github.io/content/images/thumbnail/photo-1556075798-4825dfaaf498" alt="" onerror="this.style.display = 'none'"></div></a></figure><h2 id="be-active-and-respond-quickly">Be active and respond quickly</h2><p>Keep the life-time of a pull request shorter by responding to simple comments quickly, fixing typos or renaming things for clarity, or even adding unit tests where missed.</p><p>Don’t forget to thank reviewers for their time!</p>
+                    <aside class="gh-article-meta">
+                        <div class="gh-article-meta-inner">
+                                <div class="gh-article-meta-wrapper">
+                                <h4 class="gh-author-name">
+                                    <a href="/author/johannes/">Johannes Steen</a>
+                                </h4>
+                            <time class="gh-article-date" datetime="2024-10-03">Oct 3, 2024</time></div>
+                                <a class="gh-article-tag" href="https://ragingbit.github.io/tag/collaboration/" style="--tag-color: ">Collaboration</a>
+                        </div>
+                    </aside>
+                </section>
+
+
+                <footer class="gh-article-footer gh-canvas">
+                    <nav class="gh-navigation">
+                        <div class="gh-navigation-previous">
+                                <a class="gh-navigation-link" href="/technical-debt/">← Previous</a>
+                        </div>
+
+                        <div class="gh-navigation-middle"></div>
+
+                        <div class="gh-navigation-next">
+                                <a class="gh-navigation-link" href="/pull-request-templates/">Next →</a>
+                        </div>
+                    </nav>
+                </footer>
+            </article>
+    </div>
+</main>
+
+    <footer class="gh-foot gh-outer">
+        <div class="gh-foot-inner gh-inner">
+            <nav class="gh-foot-menu">
+
+            </nav>
+
+            <div class="gh-copyright">
+                    ragingbit | blog © 2024. Powered by <a href="https://ghost.org/" target="_blank" rel="noopener">Ghost</a>
+            </div>
+        </div>
+    </footer>
+
+</div>
+
+    <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="pswp__bg"></div>
+
+    <div class="pswp__scroll-wrap">
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)"></button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/assets/built/main.min.js?v=88b8184fcd"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js" integrity="sha512-9khQRAUBYEJDCDVP2yw3LRUQvjJ0Pjx0EShmaQjcHa6AXiOv6qHQu9lCAIR8O+/D8FtaCoJ2c0Tf9Xo7hYH01Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js" integrity="sha512-SkmBfuA2hqjzEVpmnMt/LINrjop3GKWqsuLSSB3e7iBmYK7JuWw4ldmmxwD9mdm2IRTTi0OxSAfEGvgEi0i2Kw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+</body>
+
+</html>
